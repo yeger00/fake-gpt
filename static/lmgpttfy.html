@@ -2752,31 +2752,37 @@ function doTheSearch() {
         display.prop('disabled', true);
 
         // The on click animation:
-        $('#searchButton').click(function(event){
+	var search_function = function(event){
             var req_url = display.val();
-            var ans_url = window.location.href + '?q=' + req_url;
+            var ans_url = window.location.href + '?q=' + encodeURIComponent(req_url);
 
             $('#copy_url_btn').click(function(event){
                 navigator.clipboard.writeText(ans_url)
             });
-
+	    console.log(event);
             event.preventDefault();
             $('#user_real_question_1').show();
             $('#user_real_question_2').html(req_url);
-            display.html("")
 
             $('#chat_answer_url_1').show()
             var onDone2 = function() {
                 $('#chat_answer_url_2').show()
                 $('#chat_url_answer_code').show()
                 $('#chat_answer_url_2').html(ans_url);
-                
+
                 display.prop('disabled', true);
             }
             var chat_answer = $('#chat_url_answer');
             typeSearch(chat_answer, 'Certainly! here is the link to the "let me GPT that for you":', 0, onDone2)
-        });
+            display.val("");
+        }
+        $('#searchButton').click(search_function);
 
+	display.on('keydown',function(e){
+  		if(e.which == '13'){
+    			search_function(e);
+  		}
+	});
 
 
         // The first animation:
